@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">NFCSample</string>
+    <string name="card_id_left">卡号</string>
+    <string name="user_name">姓名</string>
+    <string name="user_group">组别</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
+    <string name="action_settings">setting</string>
+    <string name="scan_card">请刷卡</string>
+</resources>

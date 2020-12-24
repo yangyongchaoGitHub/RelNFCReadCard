@@ -1,6 +1,7 @@
 package com.dataexpo.nfcsample;
 
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,6 +15,7 @@ import android.nfc.Tag;
 import android.nfc.tech.MifareClassic;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +42,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -89,6 +94,11 @@ public class MainActivity extends BascActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
+
+        File f=new File("/sdcard/cardImage");
+        if (!f.exists()) {
+            f.mkdir();
+        }
 
         NfcUtils.NfcCheck(mContext);
         initView();
@@ -181,37 +191,30 @@ public class MainActivity extends BascActivity {
             public void onResponse(String response, int id) {
 //                final MsgBean msgBean = new Gson().fromJson(response, MsgBean.class);
                 Log.i(TAG, "online check expoid response: " + response);
-                MsgBean result = new Gson().fromJson(response, MsgBean.class);
+                final MsgBean result = new Gson().fromJson(response, MsgBean.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.data != null) {
+                            Log.i(TAG, " names " + result.data.toString());
+                            user = (User) result.data;
 
-                if (result.data != null) {
-                    Log.i(TAG, " names " + result.data.toString());
-                    user = new Gson().fromJson(result.data.toString(), User.class);
+                            if (user.getIsFort().equals(1) && (user.getEuStatus().equals(1) || user.getEuStatus().equals(3))) {
+                                main_tv_name.setText(user.getUiName());
+                                main_tv_group.setText(user.getEuDefine());
+                                reSetView(SHOW_STATUS_SUCCESS);
+                                showHead();
+                            } else {
+                                main_tv_init_left.setText("无权限");
+                                reSetView(SHOW_STATUS_ERROR_PERMISSION);
+                            }
 
-                    if (user.getIsFort().equals(1) && (user.getEuStatus().equals(1) || user.getEuStatus().equals(3))) {
-                        main_tv_name.setText(user.getUiName());
-                        main_tv_group.setText(user.getEuDefine());
-                        reSetView(SHOW_STATUS_SUCCESS);
-                        showHead(user.euId);
-                    } else {
-                        main_tv_init_left.setText("无权限");
-                        reSetView(SHOW_STATUS_ERROR_PERMISSION);
+                        } else {
+                            main_tv_init_left.setText("无权限");
+                            reSetView(SHOW_STATUS_ERROR_PERMISSION);
+                        }
                     }
-
-                } else {
-                    main_tv_init_left.setText("无权限");
-                    reSetView(SHOW_STATUS_ERROR_PERMISSION);
-                }
-                //回来有卡号是否存在的标志，
-                //1卡不存在，直接退出流程 status = init
-                //2卡存在 查看卡审核状态，
-                //2.1审核未通过, 提示  退出 status = init
-                //2.2 审核通过 查看使用次数
-                //3.1 使用次数已经到达最大次数 提示 退出  status = init
-                //3.2 使用次数在最大使用次数之内
-
-                //去更新使用次数
-
-                progressView.setVisibility(View.INVISIBLE);
+                });
             }
         });
     }
@@ -247,42 +250,57 @@ public class MainActivity extends BascActivity {
         });
     }
 
-    private void showHead(Integer id) {
+    private void showHead() {
         //如果人像不存在
+        File f=new File("/sdcard/cardImage/" + user.euImage);
+        Log.i(TAG, "- " + f.getAbsolutePath());
 
-
-        //获取人像
-        final HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("euId", id + "");
-
-        HttpService.getWithParams(mContext, URLs.getHead, hashMap, new HttpCallback() {
-            @Override
-            public void onError(Call call, Exception e, int id) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, "网络异常，请重新验证", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                Log.i(TAG, e.getMessage());
-
-                progressView.setVisibility(View.INVISIBLE);
+        if(f.exists())
+        {
+            try {
+                FileInputStream fis = new FileInputStream(f);
+                iv_head.setImageBitmap(BitmapFactory.decodeStream(fis));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
+//            return
+//            ContentResolver cr = this.getContentResolver();
+//            BitmapFactory.decodeStream(cr.openInputStream(f.));
+//            Bitmap bitmap = getLoacalBitmap("/sdcard/tubiao.jpg"); //从本地取图片(在cdcard中获取)  //
+//            //image1 .setImageBitmap(bitmap); //设置Bitmap
+        } else {
 
-            @Override
-            public void onResponse(String response, int id) {
-                Log.i(TAG, "online check expoid response: " + response);
-                MsgBeanString result = new Gson().fromJson(response, MsgBeanString.class);
-                saveImage(result.data.euImage, user.euImage);
+            //获取人像
+            final HashMap<String, String> hashMap = new HashMap<>();
+            hashMap.put("euId", user.euId + "");
 
+            HttpService.getWithParams(mContext, URLs.getHead, hashMap, new HttpCallback() {
+                @Override
+                public void onError(Call call, Exception e, int id) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(mContext, "网络异常，请重新验证", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    Log.i(TAG, e.getMessage());
 
+                    progressView.setVisibility(View.INVISIBLE);
+                }
+
+                @Override
+                public void onResponse(String response, int id) {
+                    Log.i(TAG, "online check expoid response: " + response);
+                    MsgBeanString result = new Gson().fromJson(response, MsgBeanString.class);
+                    saveImage(result.data.euImage, user.euImage);
 //                    }
 //                }
-                //显示图像， 并且保存到本地
-                //Bitmap bitmap = getLoacalBitmap("/sdcard/tubiao.jpg"); //从本地取图片(在cdcard中获取)  //
-                //image1 .setImageBitmap(bitmap); //设置Bitmap
-            }
-        });
+                    //显示图像， 并且保存到本地
+                    //Bitmap bitmap = getLoacalBitmap("/sdcard/tubiao.jpg"); //从本地取图片(在cdcard中获取)  //
+                    //image1 .setImageBitmap(bitmap); //设置Bitmap
+                }
+            });
+        }
     }
 
     private void saveImage(String imageStr, String name) {
@@ -294,10 +312,13 @@ public class MainActivity extends BascActivity {
     }
 
     private void saveToLocal(byte[] imgBytes, String name) {
+
         FileOutputStream out = null;
+
         try {
-            out = openFileOutput(name, Context.MODE_PRIVATE);
-            out.write(imgBytes);
+            File file = new File("/sdcard/cardImage/" + name);
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(imgBytes);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

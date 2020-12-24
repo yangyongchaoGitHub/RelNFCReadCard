@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NFCSample</string>
+    <string name="app_name">读卡校验</string>
     <string name="card_id_left">卡号</string>
     <string name="user_name">姓名</string>
     <string name="user_group">组别</string>

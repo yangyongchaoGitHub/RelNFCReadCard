@@ -242,6 +242,7 @@ public class MainActivity extends BascActivity {
     }
 
     private void showHead() {
+        //Log.i(TAG, "filedir " + this.getExternalFilesDir("images").getAbsolutePath());
         //如果人像不存在
         File f=new File("/sdcard/cardImage/" + user.euImage);
         Log.i(TAG, "- " + f.getAbsolutePath());
@@ -303,6 +304,7 @@ public class MainActivity extends BascActivity {
 
         try {
             File file = new File("/sdcard/cardImage/" + name);
+            //File file = new File(this.getExternalFilesDir("images").getAbsolutePath() + "/" + name);
             FileOutputStream fos = new FileOutputStream(file);
             fos.write(imgBytes);
         } catch (IOException e) {

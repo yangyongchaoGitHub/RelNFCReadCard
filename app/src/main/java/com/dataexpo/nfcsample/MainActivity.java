@@ -1,21 +1,11 @@
 package com.dataexpo.nfcsample;
 
-import android.app.PendingIntent;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
-import android.nfc.NfcEvent;
-import android.nfc.Tag;
-import android.nfc.tech.MifareClassic;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -23,11 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import com.dataexpo.nfcsample.pojo.MsgBean;
-import com.dataexpo.nfcsample.pojo.MsgBeanString;
 import com.dataexpo.nfcsample.pojo.User;
 import com.dataexpo.nfcsample.utils.BascActivity;
 import com.dataexpo.nfcsample.utils.NfcUtils;
@@ -39,15 +25,12 @@ import com.github.rahatarmanahmed.cpv.CircularProgressView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,6 +63,7 @@ public class MainActivity extends BascActivity {
     private final int STATUS_CHECK_CARD_EXIST = 2;
     private final int STATUS_CHECK_IMAGE = 3;
     private final int STATUS_SHOWING = 4;
+    private final int STATUS_ERROR = 5;
 
     private final int SHOW_STATUS_INIT = 1;
     private final int SHOW_STATUS_SUCCESS = 2;
@@ -161,7 +145,8 @@ public class MainActivity extends BascActivity {
 
             tv_time.setText(Utils.formatTime(new Date().getTime(), FORMAT_YMD_HMS));
             progressView.setVisibility(View.VISIBLE);
-            if (mStatus == STATUS_INIT || mStatus == STATUS_SHOWING) {
+            if (mStatus == STATUS_INIT || mStatus == STATUS_SHOWING || mStatus == STATUS_ERROR) {
+                mStatus = STATUS_CHECK_CARD_EXIST;
                 checkCard(cardId);
             }
         }
@@ -185,6 +170,7 @@ public class MainActivity extends BascActivity {
                 Log.i(TAG, e.getMessage());
 
                 progressView.setVisibility(View.INVISIBLE);
+                mStatus = STATUS_ERROR;
             }
 
             @Override
@@ -203,18 +189,23 @@ public class MainActivity extends BascActivity {
                                 main_tv_name.setText(user.getUiName());
                                 main_tv_group.setText(user.getEuDefine());
                                 reSetView(SHOW_STATUS_SUCCESS);
+                                progressView.setVisibility(View.VISIBLE);
                                 showHead();
+                                mStatus = STATUS_CHECK_IMAGE;
                             } else {
                                 main_tv_init_left.setText("无权限");
                                 reSetView(SHOW_STATUS_ERROR_PERMISSION);
+                                mStatus = STATUS_ERROR;
                             }
 
                         } else {
                             main_tv_init_left.setText("无权限");
                             reSetView(SHOW_STATUS_ERROR_PERMISSION);
+                            mStatus = STATUS_ERROR;
                         }
                     }
                 });
+
             }
         });
     }
@@ -263,11 +254,8 @@ public class MainActivity extends BascActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-//            return
-//            ContentResolver cr = this.getContentResolver();
-//            BitmapFactory.decodeStream(cr.openInputStream(f.));
-//            Bitmap bitmap = getLoacalBitmap("/sdcard/tubiao.jpg"); //从本地取图片(在cdcard中获取)  //
-//            //image1 .setImageBitmap(bitmap); //设置Bitmap
+            mStatus = STATUS_SHOWING;
+            progressView.setVisibility(View.INVISIBLE);
         } else {
 
             //获取人像
@@ -286,33 +274,31 @@ public class MainActivity extends BascActivity {
                     Log.i(TAG, e.getMessage());
 
                     progressView.setVisibility(View.INVISIBLE);
+                    mStatus = STATUS_ERROR;
                 }
 
                 @Override
                 public void onResponse(String response, int id) {
                     Log.i(TAG, "online check expoid response: " + response);
-                    MsgBeanString result = new Gson().fromJson(response, MsgBeanString.class);
-                    saveImage(result.data.euImage, user.euImage);
-//                    }
-//                }
-                    //显示图像， 并且保存到本地
-                    //Bitmap bitmap = getLoacalBitmap("/sdcard/tubiao.jpg"); //从本地取图片(在cdcard中获取)  //
-                    //image1 .setImageBitmap(bitmap); //设置Bitmap
+                    final MsgBean result = new Gson().fromJson(response, MsgBean.class);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            byte[] imgBytes = Base64.decode(result.data.euImage, NO_WRAP);
+                            Bitmap bitMap = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+                            saveToLocal(imgBytes, user.euImage);
+                            iv_head.setImageBitmap(bitMap);
+                            mStatus = STATUS_SHOWING;
+                            progressView.setVisibility(View.INVISIBLE);
+                        }
+                    });
                 }
             });
         }
     }
 
-    private void saveImage(String imageStr, String name) {
-        byte[] imgBytes = Base64.decode(imageStr, NO_WRAP);
-        Bitmap bitMap = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-        iv_head.setImageBitmap(bitMap);
-
-        saveToLocal(imgBytes, name);
-    }
-
     private void saveToLocal(byte[] imgBytes, String name) {
-
         FileOutputStream out = null;
 
         try {

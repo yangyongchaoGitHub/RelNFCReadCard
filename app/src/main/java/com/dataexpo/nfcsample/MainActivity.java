@@ -190,8 +190,8 @@ public class MainActivity extends BascActivity {
                                 main_tv_group.setText(user.getEuDefine());
                                 reSetView(SHOW_STATUS_SUCCESS);
                                 progressView.setVisibility(View.VISIBLE);
-                                showHead();
                                 mStatus = STATUS_CHECK_IMAGE;
+                                showHead();
                             } else {
                                 main_tv_init_left.setText("无权限");
                                 reSetView(SHOW_STATUS_ERROR_PERMISSION);
@@ -246,8 +246,7 @@ public class MainActivity extends BascActivity {
         File f=new File("/sdcard/cardImage/" + user.euImage);
         Log.i(TAG, "- " + f.getAbsolutePath());
 
-        if(f.exists())
-        {
+        if(f.exists()) {
             try {
                 FileInputStream fis = new FileInputStream(f);
                 iv_head.setImageBitmap(BitmapFactory.decodeStream(fis));
@@ -256,6 +255,7 @@ public class MainActivity extends BascActivity {
             }
             mStatus = STATUS_SHOWING;
             progressView.setVisibility(View.INVISIBLE);
+
         } else {
 
             //获取人像

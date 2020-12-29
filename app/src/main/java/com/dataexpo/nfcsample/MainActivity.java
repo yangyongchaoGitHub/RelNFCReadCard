@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dataexpo.nfcsample.pojo.MsgBean;
+import com.dataexpo.nfcsample.pojo.Permissions;
 import com.dataexpo.nfcsample.pojo.User;
 import com.dataexpo.nfcsample.utils.BascActivity;
 import com.dataexpo.nfcsample.utils.NfcUtils;
@@ -68,6 +69,7 @@ public class MainActivity extends BascActivity {
     private final int SHOW_STATUS_INIT = 1;
     private final int SHOW_STATUS_SUCCESS = 2;
     private final int SHOW_STATUS_ERROR_PERMISSION = 3;
+    Permissions localPermission;
 
     private User user;
 
@@ -82,6 +84,10 @@ public class MainActivity extends BascActivity {
         File f=new File("/sdcard/cardImage");
         if (!f.exists()) {
             f.mkdir();
+        }
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            localPermission = (Permissions) bundle.getSerializable("pomission");
         }
 
         NfcUtils.NfcCheck(mContext);
@@ -300,20 +306,20 @@ public class MainActivity extends BascActivity {
     }
 
     private void saveToLocal(byte[] imgBytes, String name) {
-        FileOutputStream out = null;
+        FileOutputStream fos = null;
 
         try {
             File file = new File("/sdcard/cardImage/" + name);
             //File file = new File(this.getExternalFilesDir("images").getAbsolutePath() + "/" + name);
-            FileOutputStream fos = new FileOutputStream(file);
+            fos = new FileOutputStream(file);
             fos.write(imgBytes);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (out != null) {
+            if (fos != null) {
                 try {
-                    out.flush();
-                    out.close();
+                    fos.flush();
+                    fos.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -332,45 +338,6 @@ public class MainActivity extends BascActivity {
         super.onPause ();
         //注销注册
         NfcUtils.disable(this);
-    }
-
-    public static void jsonTree(JsonElement e)
-    {
-        if (e.isJsonNull())
-        {
-            System.out.println(e.toString());
-            return;
-        }
-
-        if (e.isJsonPrimitive())
-        {
-            System.out.println("111 " + e.toString());
-            return;
-        }
-
-        if (e.isJsonArray())
-        {
-            JsonArray ja = e.getAsJsonArray();
-            if (null != ja)
-            {
-                for (JsonElement ae : ja)
-                {
-                    System.out.println("t 1");
-                            jsonTree(ae);
-                }
-            }
-            return;
-        }
-
-        if (e.isJsonObject())
-        {
-            Set<Map.Entry<String, JsonElement>> es = e.getAsJsonObject().entrySet();
-            for (Map.Entry<String, JsonElement> en : es)
-            {
-                System.out.println("o 1");
-                jsonTree(en.getValue());
-            }
-        }
     }
 
 }

@@ -12,4 +12,7 @@ public class URLs {
 
     //获取卡号在服务器的信息
     public static final String checkCard = DOMAIN + "GbhSystem/api/data/findIC.do";
+
+    //获取卡号在服务器的信息
+    public static final String queryAccessGroup = DOMAIN + "GbhSystem/api/data/findList.do";
 }

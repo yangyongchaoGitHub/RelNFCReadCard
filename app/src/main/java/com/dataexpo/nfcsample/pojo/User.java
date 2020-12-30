@@ -1,6 +1,7 @@
 package com.dataexpo.nfcsample.pojo;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 返回IC卡
@@ -10,15 +11,24 @@ public class User implements Serializable{
     //卡号是否存在:1:存在；0/null：不存在
     private Integer isFort;
     // 状态（0:待审核,1:已审核,2 驳回.3 已打印；4已发放）
-    public Integer euStatus;
+    private Integer euStatus;
     //姓名
     private String uiName;
     //团组/组别
-    public String euDefine;
+    private String euDefine;
     //euId
-    public Integer euId;
+    private Integer euId;
     //人像照片
-    public String euImage;
+    private String euImage;
+    //职务
+    private String uiCompanyTitle;
+    //英文名
+    private String uiDapt;
+    private String euPrintTime;
+    //打印时间
+    private String printTime;
+    //权限
+    private List<RegStatus> regList;
 
     public Integer getIsFort() {
         return isFort;
@@ -56,5 +66,45 @@ public class User implements Serializable{
     }
     public void setEuImage(String euImage) {
         this.euImage = euImage;
+    }
+
+    public String getUiCompanyTitle() {
+        return uiCompanyTitle;
+    }
+
+    public void setUiCompanyTitle(String uiCompanyTitle) {
+        this.uiCompanyTitle = uiCompanyTitle;
+    }
+
+    public String getUiDapt() {
+        return uiDapt;
+    }
+
+    public void setUiDapt(String uiDapt) {
+        this.uiDapt = uiDapt;
+    }
+
+    public String getEuPrintTime() {
+        return euPrintTime;
+    }
+
+    public void setEuPrintTime(String euPrintTime) {
+        this.euPrintTime = euPrintTime;
+    }
+
+    public String getPrintTime() {
+        return printTime;
+    }
+
+    public void setPrintTime(String printTime) {
+        this.printTime = printTime;
+    }
+
+    public List<RegStatus> getRegList() {
+        return regList;
+    }
+
+    public void setRegList(List<RegStatus> regList) {
+        this.regList = regList;
     }
 }

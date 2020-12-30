@@ -8,42 +8,23 @@
     >
 
     <TextView
-        android:visibility="gone"
-        android:id="@+id/main_tv_id_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/card_id_left"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.40"/>
-
-    <TextView
-        android:visibility="invisible"
-        android:id="@+id/main_tv_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_tv_id_left"
-        app:layout_constraintBottom_toBottomOf="@+id/main_tv_id_left"
-        />
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/main_tv_cardid"
+        android:id="@+id/main_tv_area"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textColor="@color/bg_black"
         android:textSize="20dp"
         android:textStyle="bold"
-        android:gravity="center"
+        android:gravity="center|left"
         android:maxLength="50"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_tv_id_left"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintVertical_bias="0.01"
         />
 
     <ImageView
@@ -64,45 +45,43 @@
 
     <TextView
         android:visibility="invisible"
-        android:id="@+id/main_tv_name_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/user_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.6"/>
-
-    <TextView
-        android:visibility="invisible"
         android:id="@+id/main_tv_name"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textColor="@color/bg_black"
-        android:textSize="40dp"
+        android:textSize="30dp"
         android:textStyle="bold"
         android:gravity="center"
         android:maxLength="50"
         app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_tv_name_left"
-        />
-
-    <TextView
-        android:visibility="gone"
-        android:id="@+id/main_tv_group_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/user_group"
+        app:layout_constraintHeight_percent="0.07"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.70"/>
+        app:layout_constraintVertical_bias="0.53"
+        />
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/main_tv_ename"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textColor="@color/bg_black"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:maxLength="50"
+        app:layout_constraintWidth_percent="1"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintVertical_bias="0.61"
+        />
 
     <TextView
         android:visibility="invisible"
@@ -114,9 +93,51 @@
         android:textStyle="bold"
         android:gravity="center"
         app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_tv_group_left"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintVertical_bias="0.69"
+        />
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/main_tv_companytitle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textColor="@color/bg_black"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintWidth_percent="1"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintVertical_bias="0.76"
+        />
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/main_tv_timeorpermission"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textColor="@color/bg_black"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintWidth_percent="1"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintVertical_bias="0.842"
         />
 
 
@@ -128,13 +149,13 @@
         android:padding="5dp"
         android:src="@drawable/success"
         android:layout_gravity="center"
-        app:layout_constraintWidth_percent="0.3"
-        app:layout_constraintHeight_percent="0.16"
+        app:layout_constraintWidth_percent="0.2"
+        app:layout_constraintHeight_percent="0.12"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95"
+        app:layout_constraintVertical_bias="0.99"
         />
 
     <TextView
@@ -181,13 +202,13 @@
         android:padding="5dp"
         android:src="@drawable/error"
         android:layout_gravity="center"
-        app:layout_constraintWidth_percent="0.62"
-        app:layout_constraintHeight_percent="0.48"
+        app:layout_constraintWidth_percent="0.51"
+        app:layout_constraintHeight_percent="0.4"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16"
+        app:layout_constraintVertical_bias="0.15"
         />
 
     <com.github.rahatarmanahmed.cpv.CircularProgressView

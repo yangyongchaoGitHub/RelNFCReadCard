@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.dataexpo.nfcsample.pojo.MsgBean;
 import com.dataexpo.nfcsample.pojo.Permissions;
+import com.dataexpo.nfcsample.pojo.RegStatus;
 import com.dataexpo.nfcsample.pojo.User;
 import com.dataexpo.nfcsample.utils.BascActivity;
 import com.dataexpo.nfcsample.utils.NfcUtils;
@@ -34,6 +35,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -59,6 +61,8 @@ public class MainActivity extends BascActivity {
     private ImageView iv_success;
     private ImageView iv_fail_permission;
     private CircularProgressView progressView;
+    private TextView main_tv_area;
+    private TextView main_tv_ename;
 
     private final int STATUS_INIT = 1;
     private final int STATUS_CHECK_CARD_EXIST = 2;
@@ -80,7 +84,7 @@ public class MainActivity extends BascActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = this;
-
+        initView();
         File f=new File("/sdcard/cardImage");
         if (!f.exists()) {
             f.mkdir();
@@ -88,10 +92,10 @@ public class MainActivity extends BascActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             localPermission = (Permissions) bundle.getSerializable("pomission");
+            main_tv_area.setText(localPermission.getNames());
         }
 
         NfcUtils.NfcCheck(mContext);
-        initView();
     }
 
     private void initView() {
@@ -101,10 +105,12 @@ public class MainActivity extends BascActivity {
         iv_init = findViewById(R.id.iv_init);
         iv_head = findViewById(R.id.iv_head);
         main_tv_name = findViewById(R.id.main_tv_name);
+        main_tv_ename = findViewById(R.id.main_tv_ename);
         main_tv_group = findViewById(R.id.main_tv_group);
         iv_success = findViewById(R.id.iv_success);
         iv_fail_permission = findViewById(R.id.iv_fail_permission);
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
+        main_tv_area = findViewById(R.id.main_tv_area);
     }
 
     private void reSetView(int status) {
@@ -113,6 +119,7 @@ public class MainActivity extends BascActivity {
             iv_init.setVisibility(View.VISIBLE);
             iv_head.setVisibility(View.INVISIBLE);
             main_tv_name.setVisibility(View.INVISIBLE);
+            main_tv_ename.setVisibility(View.INVISIBLE);
             main_tv_group.setVisibility(View.INVISIBLE);
             iv_success.setVisibility(View.INVISIBLE);
             iv_fail_permission.setVisibility(View.INVISIBLE);
@@ -123,6 +130,7 @@ public class MainActivity extends BascActivity {
             iv_init.setVisibility(View.INVISIBLE);
             iv_head.setVisibility(View.VISIBLE);
             main_tv_name.setVisibility(View.VISIBLE);
+            main_tv_ename.setVisibility(View.VISIBLE);
             main_tv_group.setVisibility(View.VISIBLE);
             iv_success.setVisibility(View.VISIBLE);
             iv_fail_permission.setVisibility(View.INVISIBLE);
@@ -132,6 +140,7 @@ public class MainActivity extends BascActivity {
             iv_init.setVisibility(View.INVISIBLE);
             iv_head.setVisibility(View.INVISIBLE);
             main_tv_name.setVisibility(View.INVISIBLE);
+            main_tv_ename.setVisibility(View.INVISIBLE);
             main_tv_group.setVisibility(View.INVISIBLE);
             iv_success.setVisibility(View.INVISIBLE);
             iv_fail_permission.setVisibility(View.VISIBLE);
@@ -192,12 +201,28 @@ public class MainActivity extends BascActivity {
                             user = (User) result.data;
 
                             if (user.getIsFort().equals(1) && (user.getEuStatus().equals(1) || user.getEuStatus().equals(3))) {
-                                main_tv_name.setText(user.getUiName());
-                                main_tv_group.setText(user.getEuDefine());
-                                reSetView(SHOW_STATUS_SUCCESS);
-                                progressView.setVisibility(View.VISIBLE);
-                                mStatus = STATUS_CHECK_IMAGE;
-                                showHead();
+                                List<RegStatus> regStatuses = user.getRegList();
+                                boolean bOk = false;
+                                for (RegStatus r : regStatuses) {
+                                    if (r.getRegionId() == localPermission.getId()) {
+                                        bOk = true;
+                                        break;
+                                    }
+                                }
+                                if (bOk) {
+                                    main_tv_name.setText(user.getUiName());
+                                    main_tv_ename.setText(user.getUiDapt());
+                                    main_tv_group.setText(user.getEuDefine());
+                                    reSetView(SHOW_STATUS_SUCCESS);
+                                    progressView.setVisibility(View.VISIBLE);
+                                    mStatus = STATUS_CHECK_IMAGE;
+                                    showHead();
+
+                                } else {
+                                    main_tv_init_left.setText("无权限");
+                                    reSetView(SHOW_STATUS_ERROR_PERMISSION);
+                                    mStatus = STATUS_ERROR;
+                                }
                             } else {
                                 main_tv_init_left.setText("无权限");
                                 reSetView(SHOW_STATUS_ERROR_PERMISSION);
@@ -211,7 +236,6 @@ public class MainActivity extends BascActivity {
                         }
                     }
                 });
-
             }
         });
     }
@@ -250,7 +274,7 @@ public class MainActivity extends BascActivity {
     private void showHead() {
         //Log.i(TAG, "filedir " + this.getExternalFilesDir("images").getAbsolutePath());
         //如果人像不存在
-        File f=new File("/sdcard/cardImage/" + user.euImage);
+        File f=new File("/sdcard/cardImage/" + user.getEuImage());
         Log.i(TAG, "- " + f.getAbsolutePath());
 
         if(f.exists()) {
@@ -267,7 +291,7 @@ public class MainActivity extends BascActivity {
 
             //获取人像
             final HashMap<String, String> hashMap = new HashMap<>();
-            hashMap.put("euId", user.euId + "");
+            hashMap.put("euId", user.getEuId() + "");
 
             HttpService.getWithParams(mContext, URLs.getHead, hashMap, new HttpCallback() {
                 @Override
@@ -292,9 +316,9 @@ public class MainActivity extends BascActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            byte[] imgBytes = Base64.decode(result.data.euImage, NO_WRAP);
+                            byte[] imgBytes = Base64.decode(result.data.getEuImage(), NO_WRAP);
                             Bitmap bitMap = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-                            saveToLocal(imgBytes, user.euImage);
+                            saveToLocal(imgBytes, user.getEuImage());
                             iv_head.setImageBitmap(bitMap);
                             mStatus = STATUS_SHOWING;
                             progressView.setVisibility(View.INVISIBLE);

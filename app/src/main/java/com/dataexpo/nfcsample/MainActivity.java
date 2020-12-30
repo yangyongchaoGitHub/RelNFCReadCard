@@ -260,6 +260,7 @@ public class MainActivity extends BascActivity {
                                     }
                                     permission += r.getNames() + " ";
                                 }
+                                permission += "学员区(含服化区) 学员区(含服化区) 学员区(含服化区) 学员区(含服化区) 学员区(含服化区)";
 
                                 main_tv_name.setText(user.getUiName());
                                 main_tv_ename.setText(user.getUiDapt());

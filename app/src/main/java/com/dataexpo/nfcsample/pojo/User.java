@@ -1,5 +1,7 @@
 package com.dataexpo.nfcsample.pojo;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,6 +31,8 @@ public class User implements Serializable{
     private String printTime;
     //权限
     private List<RegStatus> regList;
+
+    private String suffix;
 
     public Integer getIsFort() {
         return isFort;
@@ -106,5 +110,22 @@ public class User implements Serializable{
 
     public void setRegList(List<RegStatus> regList) {
         this.regList = regList;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
+    public boolean initsuffix() {
+        String[] suffixs = euImage.split("\\.");
+        if (suffixs.length == 2) {
+            this.suffix = "." + suffixs[1];
+            return true;
+        }
+        return false;
     }
 }

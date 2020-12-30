@@ -85,8 +85,14 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
                     }
                 });
                 Log.i(TAG, e.getMessage());
-
-                progressView.setVisibility(View.INVISIBLE);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv_msg.setVisibility(View.VISIBLE);
+                        btn_msg.setVisibility(View.VISIBLE);
+                        progressView.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
 
             @Override
@@ -94,24 +100,20 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
 //                final MsgBean msgBean = new Gson().fromJson(response, MsgBean.class);
                 Log.i(TAG, "online check expoid response: " + response);
                 final PermissionBean result = new Gson().fromJson(response, PermissionBean.class);
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                progressView.setVisibility(View.INVISIBLE);
-                                if (result != null && result.data != null && result.data.size() > 0) {
-                                    permissions = result.data;
-                                    dateAdapter.setData(permissions);
-                                    dateAdapter.notifyDataSetChanged();
-                                } else {
-                                    tv_msg.setVisibility(View.VISIBLE);
-                                    btn_msg.setVisibility(View.VISIBLE);
-                                    Toast.makeText(mContext, "项目查询门禁列表失败", Toast.LENGTH_LONG).show();
-                                }
-                            }
-                        });
+                        progressView.setVisibility(View.INVISIBLE);
+                        if (result != null && result.data != null && result.data.size() > 0) {
+                            permissions = result.data;
+                            dateAdapter.setData(permissions);
+                            dateAdapter.notifyDataSetChanged();
+                        } else {
+                            tv_msg.setVisibility(View.VISIBLE);
+                            btn_msg.setVisibility(View.VISIBLE);
+                            Toast.makeText(mContext, "项目查询门禁列表失败", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
             }

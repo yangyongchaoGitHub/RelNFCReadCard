@@ -68,12 +68,8 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
         tv_msg.setVisibility(View.GONE);
         btn_msg.setVisibility(View.GONE);
         final HashMap<String, String> hashMap = new HashMap<>();
-        if (count == 2) {
-            hashMap.put("expoId", 10000 + "");
-        } else {
-            hashMap.put("expoId", 1000 + "");
-        }
 
+        hashMap.put("expoId", 10000 + "");
 
         HttpService.getWithParams(mContext, URLs.queryAccessGroup, hashMap, new HttpCallback() {
             @Override
@@ -134,6 +130,7 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
 
     @Override
     public void onItemClick(View view, int position) {
+        MyApplication.setPermissionSelect(MyApplication.PERMISSION_SELECT_OK);
         Log.i(TAG, "select position: " + position);
         Permissions p = permissions.get(position);
         Intent intent = new Intent();
@@ -145,13 +142,11 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
         startActivity(intent);
     }
 
-    int count = 0;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_msg:
             case R.id.btn_msg:
-                count++;
                 goQuery();
                 break;
             default:
@@ -209,7 +204,7 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
         public void onBindViewHolder(@NonNull PermissionHolder holder, final int position) {
             holder.itemView.setTag(position);
             // 添加数据
-            holder.iv_image_show.setVisibility(View.INVISIBLE);
+            //holder.iv_image_show.setVisibility(View.INVISIBLE);
             holder.tv_permission.setText(mList.get(position).getNames());
 
             holder.iv_image_show.setOnClickListener(new View.OnClickListener() {

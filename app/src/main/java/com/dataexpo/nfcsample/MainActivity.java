@@ -95,10 +95,18 @@ public class MainActivity extends BascActivity {
      */
     private Vibrator vibrator;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.i(TAG, "onCreate " + MyApplication.getPermissionSelect());
+
+        if (MyApplication.getPermissionSelect() == MyApplication.PERMISSION_SELECT_WAIT) {
+            this.finish();
+            return;
+        }
+
         mContext = this;
         initView();
         File f=new File("/sdcard/cardImage");
@@ -452,6 +460,9 @@ public class MainActivity extends BascActivity {
         super.onPause ();
         //注销注册
         NfcUtils.disable(this);
+        Log.i(TAG, "on Pause!!!!!!!!!!!!");
+
+        MyApplication.setPermissionSelect(MyApplication.PERMISSION_SELECT_WAIT);
     }
 
 }

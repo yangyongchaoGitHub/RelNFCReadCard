@@ -120,6 +120,7 @@ public class MainActivity extends BascActivity {
         }
 
         NfcUtils.NfcCheck(mContext);
+        running = 0;
         TimerThread timerThread = new TimerThread();
         timerThread.start();
         vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
@@ -260,7 +261,6 @@ public class MainActivity extends BascActivity {
                                     }
                                     permission += r.getNames() + " ";
                                 }
-                                permission += "学员区(含服化区) 学员区(含服化区) 学员区(含服化区) 学员区(含服化区) 学员区(含服化区)";
 
                                 main_tv_name.setText(user.getUiName());
                                 main_tv_ename.setText(user.getUiDapt());
@@ -458,12 +458,17 @@ public class MainActivity extends BascActivity {
 
     @Override
     protected void onPause(){
-        super.onPause ();
+        super.onPause();
         //注销注册
         NfcUtils.disable(this);
         Log.i(TAG, "on Pause!!!!!!!!!!!!");
-
-        MyApplication.setPermissionSelect(MyApplication.PERMISSION_SELECT_WAIT);
     }
 
+    @Override
+    protected void onStop() {
+        Log.i(TAG, "onStop!!!!!!!!!!!!");
+        running = 1;
+        MyApplication.setPermissionSelect(MyApplication.PERMISSION_SELECT_WAIT);
+        super.onStop();
+    }
 }

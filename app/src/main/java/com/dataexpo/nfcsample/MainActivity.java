@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.dataexpo.nfcsample.pojo.MsgBean;
 import com.dataexpo.nfcsample.pojo.Permissions;
+import com.dataexpo.nfcsample.pojo.Record;
 import com.dataexpo.nfcsample.pojo.RegStatus;
 import com.dataexpo.nfcsample.pojo.User;
 import com.dataexpo.nfcsample.utils.BascActivity;
@@ -246,10 +247,16 @@ public class MainActivity extends BascActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Record record = new Record();
+                        record.setAdmState(2);
+                        record.setAdmAdd(localPermission.getNames());
+                        record.setAdmCode(cardId);
+
+
                         if (result.data != null) {
                             Log.i(TAG, " names " + result.data.toString());
                             user = (User) result.data;
-
+                            record.setAdmUserId(user.getEuId());
 
                             if (user.getIsFort().equals(1) && (user.getEuStatus().equals(1) || user.getEuStatus().equals(3))) {
                                 List<RegStatus> regStatuses = user.getRegList();
@@ -271,6 +278,7 @@ public class MainActivity extends BascActivity {
 
                                 if (!bOk) {
                                     main_tv_timeorpermission.setText(permission);
+                                    record.setAdmState(1);
                                 }
                                 reSetView(SHOW_STATUS_SUCCESS, bOk);
                                 main_tv_timeorpermission.setVisibility(View.VISIBLE);
@@ -302,39 +310,39 @@ public class MainActivity extends BascActivity {
                             long[] pattern = { 200, 1000};
                             vibrator.vibrate(pattern, -1);
                         }
+                        putRecord(record);
                     }
                 });
             }
         });
     }
 
-    private void addCount(String cardId) {
+    private void putRecord(Record record) {
+//        Log.i(TAG, "putRecord " + record.getAdmAdd() + " | " + record.getAdmCode() + " | " +
+//                record.getAdmState() + " | " + record.getAdmUserId());
         final HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("cardId", cardId);
+        hashMap.put("admUserId", record.getAdmUserId() + "");
+        hashMap.put("admCode", record.getAdmCode());
+        hashMap.put("admAdd", record.getAdmAdd());
+        hashMap.put("admState", record.getAdmState() + "");
 
-        HttpService.getWithParams(mContext, URLs.addCount, hashMap, new HttpCallback() {
+        HttpService.postWithParams(mContext, URLs.putRecord, hashMap, new HttpCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(mContext, "网络异常，请重新验证", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                Log.i(TAG, e.getMessage());
-
-                progressView.setVisibility(View.INVISIBLE);
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(mContext, "网络异常，请重新验证", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                Log.i(TAG, e.getMessage());
+//
+//                progressView.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onResponse(String response, int id) {
-                Log.i(TAG, "online check expoid response: " + response);
-
-                //添加使用次数成功
-                //progressView.setVisibility(View.INVISIBLE);
-                //显示拿到的数据， 进行下一个步骤
-                //显示图像
-                //showHead("");
+                //Log.i(TAG, "online check expoid response: " + response);
             }
         });
     }

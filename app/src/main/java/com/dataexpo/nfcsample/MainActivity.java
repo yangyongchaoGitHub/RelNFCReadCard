@@ -258,7 +258,7 @@ public class MainActivity extends BascActivity {
                             user = (User) result.data;
                             record.setAdmUserId(user.getEuId());
 
-                            if (user.getIsFort().equals(1) && (user.getEuStatus().equals(1) || user.getEuStatus().equals(3))) {
+                            //if (user.getIsFort().equals(1) && (user.getEuStatus().equals(1) || user.getEuStatus().equals(3))) {
                                 List<RegStatus> regStatuses = user.getRegList();
                                 boolean bOk = false;
                                 String permission = "";
@@ -292,13 +292,13 @@ public class MainActivity extends BascActivity {
                                     showStartTime = System.currentTimeMillis();
                                     showInt = SHOW_ING;
                                 }
-                            } else {
-                                main_tv_init_left.setText("审核未通过");
-                                reSetView(SHOW_STATUS_ERROR_PERMISSION, false);
-                                mStatus = STATUS_ERROR;
-                                showStartTime = System.currentTimeMillis();
-                                showInt = SHOW_ING;
-                            }
+//                            } else {
+//                                main_tv_init_left.setText("审核未通过");
+//                                reSetView(SHOW_STATUS_ERROR_PERMISSION, false);
+//                                mStatus = STATUS_ERROR;
+//                                showStartTime = System.currentTimeMillis();
+//                                showInt = SHOW_ING;
+//                            }
 
                         } else {
                             main_tv_init_left.setText("非法卡");
@@ -395,10 +395,12 @@ public class MainActivity extends BascActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            byte[] imgBytes = Base64.decode(result.data.getEuImage(), NO_WRAP);
-                            Bitmap bitMap = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
-                            saveToLocal(imgBytes, cardId + user.getSuffix());
-                            iv_head.setImageBitmap(bitMap);
+                            if (result.data.getEuImage() != null) {
+                                byte[] imgBytes = Base64.decode(result.data.getEuImage(), NO_WRAP);
+                                Bitmap bitMap = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.length);
+                                saveToLocal(imgBytes, cardId + user.getSuffix());
+                                iv_head.setImageBitmap(bitMap);
+                            }
                             mStatus = STATUS_SHOWING;
                             progressView.setVisibility(View.INVISIBLE);
                             showStartTime = System.currentTimeMillis();

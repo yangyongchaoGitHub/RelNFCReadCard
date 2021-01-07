@@ -45,7 +45,7 @@ public class NfcUtils {
             if (!mNfcAdapter.isEnabled()) {
                 IsToSet(context);
             } else {
-                Toast.makeText(context, "NFC功能已打开!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context, "NFC功能已打开!", Toast.LENGTH_SHORT).show();
             }
         }
         NfcInit(context);

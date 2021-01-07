@@ -70,6 +70,13 @@ public class MainActivity extends BascActivity {
     private ImageView iv_decorate_left;
     private ImageView iv_decorate_heart;
 
+    private ImageView iv_area_1;
+    private ImageView iv_area_2;
+    private ImageView iv_area_3;
+    private ImageView iv_area_4;
+    private ImageView iv_area_5;
+    private ImageView iv_area_6;
+
 
     private final int STATUS_INIT = 1;
     private final int STATUS_CHECK_CARD_EXIST = 2;
@@ -118,7 +125,7 @@ public class MainActivity extends BascActivity {
 
         mContext = this;
         initView();
-        File f=new File("/sdcard/cardImage");
+        File f = new File("/sdcard/cardImage");
         if (!f.exists()) {
             f.mkdir();
         }
@@ -156,6 +163,12 @@ public class MainActivity extends BascActivity {
         main_tv_companytitle_right = findViewById(R.id.main_tv_companytitle_right);
         iv_decorate_left = findViewById(R.id.iv_decorate_left);
         iv_decorate_heart = findViewById(R.id.iv_decorate_heart);
+        iv_area_1 = findViewById(R.id.iv_area_1);
+        iv_area_2 = findViewById(R.id.iv_area_2);
+        iv_area_3 = findViewById(R.id.iv_area_3);
+        iv_area_4 = findViewById(R.id.iv_area_4);
+        iv_area_5 = findViewById(R.id.iv_area_5);
+        iv_area_6 = findViewById(R.id.iv_area_6);
     }
 
     private void reSetView(int status, boolean permission) {
@@ -179,6 +192,12 @@ public class MainActivity extends BascActivity {
             main_tv_companytitle_right.setVisibility(View.INVISIBLE);
             iv_decorate_left.setVisibility(View.INVISIBLE);
             iv_decorate_heart.setVisibility(View.INVISIBLE);
+            iv_area_1.setImageDrawable(null);
+            iv_area_2.setImageDrawable(null);
+            iv_area_3.setImageDrawable(null);
+            iv_area_4.setImageDrawable(null);
+            iv_area_5.setImageDrawable(null);
+            iv_area_6.setImageDrawable(null);
 
         } else if (status == SHOW_STATUS_SUCCESS) {
             main_tv_init_left.setVisibility(View.INVISIBLE);
@@ -208,8 +227,15 @@ public class MainActivity extends BascActivity {
                 iv_fail.setVisibility(View.VISIBLE);
                 main_tv_permissionfail.setVisibility(View.VISIBLE);
             }
+            showPermissionImg();
 
         } else if (status == SHOW_STATUS_ERROR_PERMISSION) {
+            iv_area_1.setImageDrawable(null);
+            iv_area_2.setImageDrawable(null);
+            iv_area_3.setImageDrawable(null);
+            iv_area_4.setImageDrawable(null);
+            iv_area_5.setImageDrawable(null);
+            iv_area_6.setImageDrawable(null);
             main_tv_timeorpermission.setText("");
             main_tv_init_left.setVisibility(View.VISIBLE);
             iv_init.setVisibility(View.INVISIBLE);
@@ -239,11 +265,56 @@ public class MainActivity extends BascActivity {
         }
     }
 
+    private void showPermissionImg() {
+        List<RegStatus> regStatuses = user.getRegList();
+        iv_area_1.setImageDrawable(null);
+        iv_area_2.setImageDrawable(null);
+        iv_area_3.setImageDrawable(null);
+        iv_area_4.setImageDrawable(null);
+        iv_area_5.setImageDrawable(null);
+        iv_area_6.setImageDrawable(null);
+        int index = 0;
+        if (regStatuses.size() > 0) {
+            for (RegStatus r: regStatuses) {
+                if (index == 0) {
+                    setImg(iv_area_1, r.getRegionId());
+                } else if (index == 1) {
+                    setImg(iv_area_2, r.getRegionId());
+                } else if (index == 2) {
+                    setImg(iv_area_3, r.getRegionId());
+                } else if (index == 3) {
+                    setImg(iv_area_4, r.getRegionId());
+                } else if (index == 4) {
+                    setImg(iv_area_5, r.getRegionId());
+                } else if (index == 5) {
+                    setImg(iv_area_6, r.getRegionId());
+                }
+                index++;
+            }
+        }
+    }
+
+    private void setImg(ImageView iv, int rid) {
+        if (rid == 1) {
+            iv.setImageResource(R.drawable.a1);
+        } else if (rid == 2) {
+            iv.setImageResource(R.drawable.a2);
+        } else if (rid == 3) {
+            iv.setImageResource(R.drawable.a3);
+        } else if (rid == 4) {
+            iv.setImageResource(R.drawable.a4);
+        } else if (rid == 5) {
+            iv.setImageResource(R.drawable.a5);
+        } else if (rid == 6) {
+            iv.setImageResource(R.drawable.a6);
+        }
+    }
+
     @Override
-    protected void onNewIntent(Intent intent){
-        super.onNewIntent (intent);
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
         // 得到是否检测到ACTION_TECH_DISCOVERED触发
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals (intent.getAction ())) {
+        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             // 处理该intent
             cardId = NfcUtils.getCardId(intent);
             Log.i(TAG, " cardId is " + cardId);
@@ -300,39 +371,39 @@ public class MainActivity extends BascActivity {
                             record.setAdmUserId(user.getEuId());
 
                             //if (user.getIsFort().equals(1) && (user.getEuStatus().equals(1) || user.getEuStatus().equals(3))) {
-                                List<RegStatus> regStatuses = user.getRegList();
-                                boolean bOk = false;
-                                String permission = "";
-                                for (RegStatus r : regStatuses) {
-                                    if (r.getRegionId() == localPermission.getId()) {
-                                        bOk = true;
-                                    }
-                                    permission += r.getNames() + " ";
+                            List<RegStatus> regStatuses = user.getRegList();
+                            boolean bOk = false;
+                            String permission = "";
+                            for (RegStatus r : regStatuses) {
+                                if (r.getRegionId() == localPermission.getId()) {
+                                    bOk = true;
                                 }
+                                permission += r.getNames() + " ";
+                            }
 
-                                main_tv_name.setText(user.getUiName());
-                                main_tv_ename.setText(user.getUiDapt());
-                                main_tv_group.setText(user.getEuDefine());
-                                main_tv_companytitle.setText(user.getUiCompanyTitle());
+                            main_tv_name.setText(user.getUiName());
+                            main_tv_ename.setText(user.getUiDapt());
+                            main_tv_group.setText(user.getEuDefine());
+                            main_tv_companytitle.setText(user.getUiCompanyTitle());
 
-                                main_tv_timeorpermission.setText(user.getPrintTime());
+                            main_tv_timeorpermission.setText(user.getPrintTime());
 
-                                if (!bOk) {
-                                    main_tv_timeorpermission.setText(permission);
-                                    record.setAdmState(1);
-                                }
-                                reSetView(SHOW_STATUS_SUCCESS, bOk);
-                                main_tv_timeorpermission.setVisibility(View.VISIBLE);
+                            if (!bOk) {
+                                //main_tv_timeorpermission.setText(permission);
+                                record.setAdmState(1);
+                            }
+                            reSetView(SHOW_STATUS_SUCCESS, bOk);
+                            main_tv_timeorpermission.setVisibility(View.VISIBLE);
 
-                                if (user.initsuffix()) {
-                                    progressView.setVisibility(View.VISIBLE);
-                                    mStatus = STATUS_CHECK_IMAGE;
-                                    showHead();
-                                } else {
-                                    mStatus = STATUS_SHOWING;
-                                    showStartTime = System.currentTimeMillis();
-                                    showInt = SHOW_ING;
-                                }
+                            if (user.initsuffix()) {
+                                progressView.setVisibility(View.VISIBLE);
+                                mStatus = STATUS_CHECK_IMAGE;
+                                showHead();
+                            } else {
+                                mStatus = STATUS_SHOWING;
+                                showStartTime = System.currentTimeMillis();
+                                showInt = SHOW_ING;
+                            }
 //                            } else {
 //                                main_tv_init_left.setText("审核未通过");
 //                                reSetView(SHOW_STATUS_ERROR_PERMISSION, false);
@@ -348,7 +419,7 @@ public class MainActivity extends BascActivity {
                             showStartTime = System.currentTimeMillis();
                             showInt = SHOW_ING;
                             //手机震动
-                            long[] pattern = { 200, 1000};
+                            long[] pattern = {200, 1000};
                             vibrator.vibrate(pattern, -1);
                         }
                         putRecord(record);
@@ -394,7 +465,7 @@ public class MainActivity extends BascActivity {
         File f = new File("/sdcard/cardImage/" + cardId + user.getSuffix());
         Log.i(TAG, "- " + f.getAbsolutePath());
 
-        if(f.exists()) {
+        if (f.exists()) {
             //显示本地图片
             try {
                 FileInputStream fis = new FileInputStream(f);
@@ -502,13 +573,13 @@ public class MainActivity extends BascActivity {
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         NfcUtils.enable(this);
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
         //注销注册
         NfcUtils.disable(this);

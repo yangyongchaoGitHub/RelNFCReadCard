@@ -63,6 +63,13 @@ public class MainActivity extends BascActivity {
     private CircularProgressView progressView;
     private TextView main_tv_area;
     private TextView main_tv_ename;
+    private ImageView main_tv_name_right;
+    private ImageView main_tv_ename_right;
+    private ImageView main_tv_group_right;
+    private ImageView main_tv_companytitle_right;
+    private ImageView iv_decorate_left;
+    private ImageView iv_decorate_heart;
+
 
     private final int STATUS_INIT = 1;
     private final int STATUS_CHECK_CARD_EXIST = 2;
@@ -73,6 +80,7 @@ public class MainActivity extends BascActivity {
     private final int SHOW_STATUS_INIT = 1;
     private final int SHOW_STATUS_SUCCESS = 2;
     private final int SHOW_STATUS_ERROR_PERMISSION = 3;
+    private final int SHOW_STATUS_CLEAE = 4;
 
     private final int SHOW_INIT = 0;
     private final int SHOW_ING = 1;
@@ -142,6 +150,12 @@ public class MainActivity extends BascActivity {
         main_tv_permissionfail = findViewById(R.id.main_tv_permissionfail);
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
         main_tv_area = findViewById(R.id.main_tv_area);
+        main_tv_name_right = findViewById(R.id.main_tv_name_right);
+        main_tv_ename_right = findViewById(R.id.main_tv_ename_right);
+        main_tv_group_right = findViewById(R.id.main_tv_group_right);
+        main_tv_companytitle_right = findViewById(R.id.main_tv_companytitle_right);
+        iv_decorate_left = findViewById(R.id.iv_decorate_left);
+        iv_decorate_heart = findViewById(R.id.iv_decorate_heart);
     }
 
     private void reSetView(int status, boolean permission) {
@@ -159,6 +173,12 @@ public class MainActivity extends BascActivity {
             iv_fail_permission.setVisibility(View.INVISIBLE);
             main_tv_permissionfail.setVisibility(View.INVISIBLE);
             progressView.setVisibility(View.INVISIBLE);
+            main_tv_name_right.setVisibility(View.INVISIBLE);
+            main_tv_ename_right.setVisibility(View.INVISIBLE);
+            main_tv_group_right.setVisibility(View.INVISIBLE);
+            main_tv_companytitle_right.setVisibility(View.INVISIBLE);
+            iv_decorate_left.setVisibility(View.INVISIBLE);
+            iv_decorate_heart.setVisibility(View.INVISIBLE);
 
         } else if (status == SHOW_STATUS_SUCCESS) {
             main_tv_init_left.setVisibility(View.INVISIBLE);
@@ -172,6 +192,13 @@ public class MainActivity extends BascActivity {
 
             iv_fail_permission.setVisibility(View.INVISIBLE);
             progressView.setVisibility(View.INVISIBLE);
+            main_tv_name_right.setVisibility(View.VISIBLE);
+            main_tv_ename_right.setVisibility(View.VISIBLE);
+            main_tv_group_right.setVisibility(View.VISIBLE);
+            main_tv_companytitle_right.setVisibility(View.VISIBLE);
+            iv_decorate_left.setVisibility(View.VISIBLE);
+            iv_decorate_heart.setVisibility(View.VISIBLE);
+
             if (permission) {
                 iv_success.setVisibility(View.VISIBLE);
                 iv_fail.setVisibility(View.INVISIBLE);
@@ -197,6 +224,18 @@ public class MainActivity extends BascActivity {
             iv_fail_permission.setVisibility(View.VISIBLE);
             main_tv_timeorpermission.setVisibility(View.VISIBLE);
             progressView.setVisibility(View.INVISIBLE);
+            main_tv_name_right.setVisibility(View.INVISIBLE);
+            main_tv_ename_right.setVisibility(View.INVISIBLE);
+            main_tv_group_right.setVisibility(View.INVISIBLE);
+            main_tv_companytitle_right.setVisibility(View.INVISIBLE);
+            iv_decorate_left.setVisibility(View.INVISIBLE);
+            iv_decorate_heart.setVisibility(View.INVISIBLE);
+        } else if (status == SHOW_STATUS_CLEAE) {
+            iv_head.setImageDrawable(null);
+            main_tv_name.setText("");
+            main_tv_ename.setText("");
+            main_tv_group.setText("");
+            main_tv_companytitle.setText("");
         }
     }
 
@@ -223,6 +262,8 @@ public class MainActivity extends BascActivity {
 
         final HashMap<String, String> hashMap = new HashMap<>();
         hashMap.put("ICD", cardId);
+        //重置原内容
+        reSetView(SHOW_STATUS_CLEAE, false);
 
         HttpService.getWithParams(mContext, URLs.checkCard, hashMap, new HttpCallback() {
             @Override

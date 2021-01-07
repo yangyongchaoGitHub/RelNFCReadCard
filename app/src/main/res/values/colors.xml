@@ -13,4 +13,6 @@
     <color name="bg_green">#00ff00</color>
     <color name="bg_deep_gray">#BFBFBF</color>
     <color name="bg_sky_blue">#52C7FB</color>
+    <color name="text_green">#91F473</color>
+    91F473
 </resources>

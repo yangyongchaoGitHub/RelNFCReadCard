@@ -16,7 +16,7 @@
             android:layout_height="35dp"
             android:layout_weight="2"
             android:gravity="center"
-            android:src="@drawable/selectpng"/>
+            android:src="@drawable/select"/>
 
         <TextView
             android:id="@+id/tv_item_permission"
@@ -25,7 +25,7 @@
             android:layout_weight="5"
             android:gravity="left|center"
             android:textSize="20dp"
-            android:textColor="@color/bg_black"
+            android:textColor="@color/text_green"
             android:textStyle="bold" />
 
 

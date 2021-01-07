@@ -5,26 +5,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_root"
+    android:background="@drawable/background"
     >
 
     <TextView
         android:id="@+id/main_tv_area"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:textColor="@color/bg_black"
-        android:textSize="20dp"
+        android:textColor="@color/text_green"
+        android:textSize="24dp"
         android:textStyle="bold"
-        android:gravity="center|left"
+        android:gravity="center|top"
         android:maxLength="50"
-        android:layout_marginStart="10dp"
+        android:text="学员区（含服化区）"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_decorate_left"
         app:layout_constraintWidth_percent="1"
         app:layout_constraintHeight_percent="0.07"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.01"
+        app:layout_constraintVertical_bias="0.000"
         />
 
     <ImageView
@@ -32,15 +32,14 @@
         android:id="@+id/iv_head"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="5dp"
         android:layout_gravity="center"
-        app:layout_constraintWidth_percent="0.51"
-        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintWidth_percent="0.33"
+        app:layout_constraintHeight_percent="0.20"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16"
+        app:layout_constraintVertical_bias="0.19"
         />
 
     <TextView
@@ -49,18 +48,32 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textColor="@color/bg_black"
-        android:textSize="30dp"
+        android:background="@color/bg_white"
+        android:textSize="26dp"
         android:textStyle="bold"
         android:gravity="center"
         android:maxLength="50"
-        app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintHeight_percent="0.055"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.53"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.46"
+        />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/main_tv_name_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/smile"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintLeft_toRightOf="@+id/main_tv_name"
+        app:layout_constraintBottom_toBottomOf="@+id/main_tv_name"
+        app:layout_constraintTop_toTopOf="@+id/main_tv_name"
+        app:layout_constraintRight_toRightOf="parent"
         />
 
     <TextView
@@ -69,18 +82,32 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textColor="@color/bg_black"
-        android:textSize="30dp"
+        android:background="@color/bg_white"
+        android:textSize="26dp"
         android:textStyle="bold"
         android:gravity="center"
         android:maxLength="50"
-        app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintHeight_percent="0.055"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.61"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.54"
+        />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/main_tv_ename_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/smile"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintLeft_toRightOf="@+id/main_tv_ename"
+        app:layout_constraintBottom_toBottomOf="@+id/main_tv_ename"
+        app:layout_constraintTop_toTopOf="@+id/main_tv_ename"
+        app:layout_constraintRight_toRightOf="parent"
         />
 
     <TextView
@@ -89,17 +116,31 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textColor="@color/bg_black"
-        android:textSize="30dp"
+        android:background="@color/bg_white"
+        android:textSize="26dp"
         android:textStyle="bold"
         android:gravity="center"
-        app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintHeight_percent="0.055"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.69"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.62"
+        />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/main_tv_group_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/smile"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintLeft_toRightOf="@+id/main_tv_group"
+        app:layout_constraintBottom_toBottomOf="@+id/main_tv_group"
+        app:layout_constraintTop_toTopOf="@+id/main_tv_group"
+        app:layout_constraintRight_toRightOf="parent"
         />
 
     <TextView
@@ -108,35 +149,49 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:textColor="@color/bg_black"
-        android:textSize="30dp"
+        android:background="@color/bg_white"
+        android:textSize="26dp"
         android:textStyle="bold"
         android:gravity="center"
-        app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintHeight_percent="0.055"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.76"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.70"
+        />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/main_tv_companytitle_right"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/smile"
+        app:layout_constraintHeight_percent="0.03"
+        app:layout_constraintLeft_toRightOf="@+id/main_tv_companytitle"
+        app:layout_constraintBottom_toBottomOf="@+id/main_tv_companytitle"
+        app:layout_constraintTop_toTopOf="@+id/main_tv_companytitle"
+        app:layout_constraintRight_toRightOf="parent"
         />
 
     <TextView
         android:id="@+id/main_tv_timeorpermission"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:textColor="@color/bg_black"
+        android:textColor="@color/bg_white"
         android:textSize="16dp"
         android:textStyle="bold"
         android:gravity="center"
-        app:layout_constraintWidth_percent="1"
-        app:layout_constraintHeight_percent="0.1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintHeight_percent="0.08"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.87"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.78"
         />
 
     <ImageView
@@ -153,7 +208,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.99"
+        app:layout_constraintVertical_bias="0.91"
         />
 
     <ImageView
@@ -161,42 +216,36 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:padding="5dp"
         android:src="@drawable/error"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.12"
-        app:layout_constraintHorizontal_bias="0.252"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.99"
-        app:layout_constraintWidth_percent="0.2" />
+        app:layout_constraintWidth_percent="0.2"
+        app:layout_constraintVertical_bias="0.91"/>
 
     <TextView
         android:visibility="invisible"
         android:id="@+id/main_tv_permissionfail"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:textColor="@color/bg_black"
-        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/bg_white"
+        android:textSize="16dp"
         android:textStyle="bold"
         android:gravity="center"
         android:text="@string/permissionfail"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_fail"
-        app:layout_constraintStart_toEndOf="@+id/iv_fail"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_fail"
-        app:layout_constraintHorizontal_bias="0.02"
-        app:layout_constraintVertical_bias="0.842"
+        app:layout_constraintTop_toBottomOf="@+id/iv_success"
         />
 
     <TextView
         android:id="@+id/main_tv_init_left"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:textColor="@color/bg_black"
+        android:textColor="@color/bg_white"
         android:textSize="40dp"
         android:textStyle="bold"
         android:gravity="center"
@@ -259,4 +308,30 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/iv_decorate_left"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/decorate_left"
+        app:layout_constraintWidth_percent="0.22"
+        app:layout_constraintHeight_percent="0.88"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/iv_decorate_heart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/decorate_heart"
+        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintHeight_percent="0.07"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_head"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

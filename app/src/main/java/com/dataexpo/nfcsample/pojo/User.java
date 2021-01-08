@@ -121,6 +121,9 @@ public class User implements Serializable{
     }
 
     public boolean initsuffix() {
+        if (euImage == null || "".equals(euImage)) {
+            return false;
+        }
         String[] suffixs = euImage.split("\\.");
         if (suffixs.length == 2) {
             this.suffix = "." + suffixs[1];

@@ -179,8 +179,12 @@ public class MainActivity extends BascActivity {
             main_tv_name.setVisibility(View.INVISIBLE);
             main_tv_ename.setVisibility(View.INVISIBLE);
             main_tv_group.setVisibility(View.INVISIBLE);
-            main_tv_timeorpermission.setVisibility(View.INVISIBLE);
             main_tv_companytitle.setVisibility(View.INVISIBLE);
+            main_tv_name.setTextSize(26);
+            main_tv_ename.setTextSize(26);
+            main_tv_group.setTextSize(26);
+            main_tv_companytitle.setTextSize(26);
+            main_tv_timeorpermission.setVisibility(View.INVISIBLE);
             iv_success.setVisibility(View.INVISIBLE);
             iv_fail.setVisibility(View.INVISIBLE);
             iv_fail_permission.setVisibility(View.INVISIBLE);
@@ -380,11 +384,36 @@ public class MainActivity extends BascActivity {
                                 }
                                 permission += r.getNames() + " ";
                             }
+                            main_tv_name.setTextSize(26);
+                            main_tv_ename.setTextSize(26);
+                            main_tv_group.setTextSize(26);
+                            main_tv_companytitle.setTextSize(26);
 
-                            main_tv_name.setText(user.getUiName());
-                            main_tv_ename.setText(user.getUiDapt());
-                            main_tv_group.setText(user.getEuDefine());
-                            main_tv_companytitle.setText(user.getUiCompanyTitle());
+                            if (user.getUiName() != null && !"null".equals(user.getUiName()) && !"".equals(user.getUiName())) {
+                                if (user.getUiName().length() > 7) {
+                                    main_tv_name.setTextSize(13);
+                                }
+                                main_tv_name.setText(user.getUiName());
+                            }
+                            if (user.getUiDapt() != null && !"null".equals(user.getUiDapt()) && !"".equals(user.getUiDapt())) {
+                                if (user.getUiDapt().length() > 7) {
+                                    main_tv_ename.setTextSize(13);
+                                }
+                                main_tv_ename.setText(user.getUiDapt());
+                            }
+                            if (user.getEuDefine() != null && !"null".equals(user.getEuDefine()) && !"".equals(user.getEuDefine())) {
+                                if (user.getEuDefine().length() > 7) {
+                                    main_tv_group.setTextSize(13);
+                                }
+                                main_tv_group.setText(user.getEuDefine());
+                            }
+                            if (user.getUiCompanyTitle() != null && !"null".equals(user.getUiCompanyTitle()) && !"".equals(user.getUiCompanyTitle())) {
+                                if (user.getUiCompanyTitle().length() > 7) {
+                                    main_tv_companytitle.setTextSize(13);
+                                }
+                                main_tv_companytitle.setText(user.getUiCompanyTitle());
+                            }
+
 
                             main_tv_timeorpermission.setText(user.getPrintTime());
 
@@ -569,6 +598,7 @@ public class MainActivity extends BascActivity {
                     }
                 }
             }
+            running = 2;
         }
     }
 
@@ -576,6 +606,12 @@ public class MainActivity extends BascActivity {
     protected void onResume() {
         super.onResume();
         NfcUtils.enable(this);
+        Log.i("onResume", + running + " onResumeonResumeonResumeonResumeonResumeonResumeonResumeonResumeonResumeonResumeonResume");
+        if (running == 2) {
+            running = 0;
+            TimerThread timerThread = new TimerThread();
+            timerThread.start();
+        }
     }
 
     @Override

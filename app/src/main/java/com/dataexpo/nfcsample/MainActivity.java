@@ -320,11 +320,12 @@ public class MainActivity extends BascActivity {
         // 得到是否检测到ACTION_TECH_DISCOVERED触发
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             // 处理该intent
-            cardId = NfcUtils.getCardId(intent);
-            Log.i(TAG, " cardId is " + cardId);
 
             progressView.setVisibility(View.VISIBLE);
             if (mStatus == STATUS_INIT || mStatus == STATUS_SHOWING || mStatus == STATUS_ERROR) {
+                cardId = NfcUtils.getCardId(intent);
+                Log.i(TAG, " cardId is " + cardId);
+
                 showInt = SHOW_WORKING;
                 mStatus = STATUS_CHECK_CARD_EXIST;
                 checkCard();

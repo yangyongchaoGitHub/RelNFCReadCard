@@ -23,6 +23,7 @@ import com.dataexpo.nfcsample.pojo.PermissionList;
 import com.dataexpo.nfcsample.pojo.Permissions;
 import com.dataexpo.nfcsample.pojo.User;
 import com.dataexpo.nfcsample.utils.BascActivity;
+import com.dataexpo.nfcsample.utils.Utils;
 import com.dataexpo.nfcsample.utils.net.HttpCallback;
 import com.dataexpo.nfcsample.utils.net.HttpService;
 import com.dataexpo.nfcsample.utils.net.URLs;
@@ -44,6 +45,7 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
     private CircularProgressView progressView;
     private TextView tv_msg;
     private Button btn_msg;
+    private TextView tv_version;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
     }
 
     private void initSelectorValue() {
+        tv_version.setText(Utils.getVersionName(mContext));
         goQuery();
 
         dateAdapter = new CodeRecordAdapter();
@@ -126,6 +129,7 @@ public class MainSelectorActiivty extends BascActivity implements OnItemClickLis
         recyclerView.setLayoutManager(layoutManager);
         progressView = (CircularProgressView) findViewById(R.id.progress_view);
         progressView.setVisibility(View.VISIBLE);
+        tv_version = findViewById(R.id.tv_version);
     }
 
     @Override

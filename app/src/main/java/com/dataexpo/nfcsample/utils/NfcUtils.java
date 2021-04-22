@@ -182,18 +182,23 @@ public class NfcUtils {
     }
 
     public static String getCardId(Intent intent) {
-        Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        String CardId = bytesToHexStringNo0x(tagFromIntent.getId());
-        long cardId = Long.parseLong(CardId, 16);
-        CardId = Long.toString(cardId);
-        if (CardId.length() < 10) {
-            StringBuilder add = new StringBuilder();
-            for (int i = 0; i < 10- CardId.length(); i++) {
-                add.insert(0, "0");
+        try {
+            Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            String CardId = bytesToHexStringNo0x(tagFromIntent.getId());
+            long cardId = Long.parseLong(CardId, 16);
+            CardId = Long.toString(cardId);
+            if (CardId.length() < 10) {
+                StringBuilder add = new StringBuilder();
+                for (int i = 0; i < 10- CardId.length(); i++) {
+                    add.insert(0, "0");
+                }
+                CardId = add + CardId;
             }
-            CardId = add + CardId;
+            return CardId;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
-        return CardId;
     }
 
     private String bytesToHexString(byte[] src){

@@ -324,11 +324,24 @@ public class MainActivity extends BascActivity {
             progressView.setVisibility(View.VISIBLE);
             if (mStatus == STATUS_INIT || mStatus == STATUS_SHOWING || mStatus == STATUS_ERROR) {
                 cardId = NfcUtils.getCardId(intent);
-                Log.i(TAG, " cardId is " + cardId);
+                if (cardId.equals("")) {
+                    main_tv_init_left.setText("非法卡");
+                    reSetView(SHOW_STATUS_ERROR_PERMISSION, false);
+                    mStatus = STATUS_ERROR;
+                    showStartTime = System.currentTimeMillis();
+                    showInt = SHOW_ING;
+                    //手机震动
+                    long[] pattern = {200, 1000};
+                    vibrator.vibrate(pattern, -1);
+                } else {
+                    Log.i(TAG, " cardId is " + cardId);
 
-                showInt = SHOW_WORKING;
-                mStatus = STATUS_CHECK_CARD_EXIST;
-                checkCard();
+                    showInt = SHOW_WORKING;
+                    mStatus = STATUS_CHECK_CARD_EXIST;
+                    //checkCard();
+                    //总决赛
+                    checkFinalsCard();
+                }
             }
         }
     }
@@ -422,6 +435,132 @@ public class MainActivity extends BascActivity {
                                 //main_tv_timeorpermission.setText(permission);
                                 record.setAdmState(1);
                             }
+                            reSetView(SHOW_STATUS_SUCCESS, bOk);
+                            main_tv_timeorpermission.setVisibility(View.VISIBLE);
+
+                            if (user.initsuffix()) {
+                                progressView.setVisibility(View.VISIBLE);
+                                mStatus = STATUS_CHECK_IMAGE;
+                                showHead();
+                            } else {
+                                mStatus = STATUS_SHOWING;
+                                showStartTime = System.currentTimeMillis();
+                                showInt = SHOW_ING;
+                            }
+//                            } else {
+//                                main_tv_init_left.setText("审核未通过");
+//                                reSetView(SHOW_STATUS_ERROR_PERMISSION, false);
+//                                mStatus = STATUS_ERROR;
+//                                showStartTime = System.currentTimeMillis();
+//                                showInt = SHOW_ING;
+//                            }
+
+                        } else {
+                            main_tv_init_left.setText("非法卡");
+                            reSetView(SHOW_STATUS_ERROR_PERMISSION, false);
+                            mStatus = STATUS_ERROR;
+                            showStartTime = System.currentTimeMillis();
+                            showInt = SHOW_ING;
+                            //手机震动
+                            long[] pattern = {200, 1000};
+                            vibrator.vibrate(pattern, -1);
+                        }
+                        putRecord(record);
+                    }
+                });
+            }
+        });
+    }
+
+    private void checkFinalsCard() {
+        Log.i(TAG, "checkCard " + cardId);
+
+        final HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("ICD", cardId);
+        //重置原内容
+        reSetView(SHOW_STATUS_CLEAE, false);
+
+        HttpService.getWithParams(mContext, URLs.checkFinalCard, hashMap, new HttpCallback() {
+            @Override
+            public void onError(Call call, Exception e, int id) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(mContext, "网络异常，请重新验证", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                Log.i(TAG, e.getMessage());
+
+                progressView.setVisibility(View.INVISIBLE);
+                mStatus = STATUS_ERROR;
+            }
+
+            @Override
+            public void onResponse(String response, int id) {
+//                final MsgBean msgBean = new Gson().fromJson(response, MsgBean.class);
+                Log.i(TAG, "online check expoid response: " + response);
+                final MsgBean result = new Gson().fromJson(response, MsgBean.class);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Record record = new Record();
+                        record.setAdmState(2);
+                        record.setAdmAdd(localPermission.getNames());
+                        record.setAdmCode(cardId);
+
+
+                        if (result.data != null) {
+                            Log.i(TAG, " names " + result.data.toString());
+                            user = (User) result.data;
+                            record.setAdmUserId(user.getEuId());
+
+                            //if (user.getIsFort().equals(1) && (user.getEuStatus().equals(1) || user.getEuStatus().equals(3))) {
+                            List<RegStatus> regStatuses = user.getRegList();
+                            boolean bOk = true;
+                            String permission = "";
+                            for (RegStatus r : regStatuses) {
+                                if (r.getRegionId() == localPermission.getId()) {
+                                    //bOk = true;
+                                }
+                                permission += r.getNames() + " ";
+                            }
+                            main_tv_name.setTextSize(26);
+                            main_tv_ename.setTextSize(26);
+                            main_tv_group.setTextSize(26);
+                            main_tv_companytitle.setTextSize(26);
+
+                            if (user.getUiName() != null && !"null".equals(user.getUiName()) && !"".equals(user.getUiName())) {
+                                if (user.getUiName().length() > 7) {
+                                    main_tv_name.setTextSize(13);
+                                }
+                                main_tv_name.setText(user.getUiName());
+                            }
+                            if (user.getUiDapt() != null && !"null".equals(user.getUiDapt()) && !"".equals(user.getUiDapt())) {
+                                if (user.getUiDapt().length() > 7) {
+                                    main_tv_ename.setTextSize(13);
+                                }
+                                main_tv_ename.setText(user.getUiDapt());
+                            }
+                            if (user.getEuDefine() != null && !"null".equals(user.getEuDefine()) && !"".equals(user.getEuDefine())) {
+                                if (user.getEuDefine().length() > 7) {
+                                    main_tv_group.setTextSize(13);
+                                }
+                                main_tv_group.setText(user.getEuDefine());
+                            }
+                            if (user.getUiCompanyTitle() != null && !"null".equals(user.getUiCompanyTitle()) && !"".equals(user.getUiCompanyTitle())) {
+                                if (user.getUiCompanyTitle().length() > 7) {
+                                    main_tv_companytitle.setTextSize(13);
+                                }
+                                main_tv_companytitle.setText(user.getUiCompanyTitle());
+                            }
+
+
+                            main_tv_timeorpermission.setText(user.getPrintTime());
+
+//                            if (!bOk) {
+//                                //main_tv_timeorpermission.setText(permission);
+//                                record.setAdmState(1);
+//                            }
                             reSetView(SHOW_STATUS_SUCCESS, bOk);
                             main_tv_timeorpermission.setVisibility(View.VISIBLE);
 
@@ -607,7 +746,7 @@ public class MainActivity extends BascActivity {
     protected void onResume() {
         super.onResume();
         NfcUtils.enable(this);
-        Log.i("onResume", + running + " onResumeonResumeonResumeonResumeonResumeonResumeonResumeonResumeonResumeonResumeonResume");
+        Log.i("onResume", + running + " onResume");
         if (running == 2) {
             running = 0;
             TimerThread timerThread = new TimerThread();

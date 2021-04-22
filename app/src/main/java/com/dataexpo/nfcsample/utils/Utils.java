@@ -1,5 +1,7 @@
 package com.dataexpo.nfcsample.utils;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.text.TextUtils;
 import android.util.Base64;
 
@@ -28,5 +30,16 @@ public class Utils {
         return dateFormat.format(date);
     }
 
-
+    public static String getVersionName(Context context) {
+        if (context != null) {
+            try {
+                return context.getPackageManager()
+                        .getPackageInfo(context.getPackageName(), 0)
+                        .versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return "1.0.0";
+    }
 }
